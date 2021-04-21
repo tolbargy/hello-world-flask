@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-apps
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-flask
+  namespace: demo-apps
+  labels:
+    app: hello-world-flask
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world-flask
+  template:
+    metadata:
+      labels:
+        app: hello-world-flask
+    spec:
+      containers:
+      - name: hello-world-flask
+        image: tolbargy/hello-world-flask:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-flask
+  namespace: demo-apps
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8282
+  selector:
+    app: hello-world-flask
