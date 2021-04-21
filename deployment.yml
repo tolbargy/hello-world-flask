@@ -35,6 +35,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 8282
+    - protocol: TCP
+      port: 8282
+      targetPort: 5000
+      name: http
   selector:
     app: hello-world-flask
