@@ -14,7 +14,7 @@ pipeline {
      stages {
          stage('Configuracion base') {
              steps {
-                sh 'whoami'
+                echo "${NOMBRE_TEST}"
 	         }
          }
 
