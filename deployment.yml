@@ -4,6 +4,18 @@ metadata:
   name: demo-apps
 ---
 
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+  namespace: demo-apps
+data:
+  username: cm9vdC10ZXN0Cg==
+  password: cHAxMjM0NTYK
+  token: ZXkuNTU2NjZlZgo=
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,6 +35,22 @@ spec:
       - name: hello-world-flask
         image: tolbargy/hello-world-flask:latest
         imagePullPolicy: Always
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: DB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: token
         ports:
         - containerPort: 5000
 ---
