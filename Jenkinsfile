@@ -8,7 +8,7 @@ pipeline {
           
      // Asignamos variables de entorno
      environment {
-        NOMBRE_TEST="saludooooooo"
+        NOMBRE_TEST="saludooooooozzzz"
      }
      
      stages {
