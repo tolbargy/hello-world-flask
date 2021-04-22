@@ -1,9 +1,0 @@
-version: '3'  
-services:
-  hello-world-flask:
-    image: tolbargy/hello-world-flask
-    container_name: hello-world-flask
-    build: 
-      context: ./
-    ports:  
-    - "6969:5000"
