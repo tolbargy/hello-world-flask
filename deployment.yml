@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-apps
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+  namespace: demo-apps
+data:
+  username: cm9vdC10ZXN0Cg==
+  password: cHAxMjM0NTYK
+  token: ZXkuNTU2NjZlZgo=
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-flask
+  namespace: demo-apps
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world-flask
+  template:
+    metadata:
+      labels:
+        app: hello-world-flask
+    spec:
+      containers:
+      - name: hello-world-flask
+        image: tolbargy/hello-world-flask:latest
+        imagePullPolicy: Always
+        env:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: DB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: token
+        ports:
+        - containerPort: 5000
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-flask
+  namespace: demo-apps
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8282
+      targetPort: 5000
+      name: http
+  selector:
+    app: hello-world-flask
